@@ -6,4 +6,5 @@ export type TDocument = {
   images: string[];
   createdAt: Date;
   updatedAt: Date;
+  isDeleted: boolean;
 };

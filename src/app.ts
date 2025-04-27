@@ -22,6 +22,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:5000",
       "http://localhost:3001",
+      "https://jitu-nath-client.vercel.app"
     ],
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type","x-refresh-token",], // allow Authorization header
@@ -42,7 +43,7 @@ app.use("/api/v1", router);
 // Welcome route
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "Welcome to TastyHub",
+    message: "Welcome to jitu-nath",
   });
 });
 

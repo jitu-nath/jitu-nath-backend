@@ -26,29 +26,43 @@ const loginUser = async (email: string, password: string) => {
   if (!validUser) {
     throw new Error("Invalid email or password");
   }
+  //create token ;
+  const accessToken = jwt.sign(
+    {
+      id: validUser._id,
+      email: validUser.email,
+      name: validUser.name,
+    },
+    config.jwt_access_secret!,
+    {
+      expiresIn: "1y",
+    },
+  );
+return {
+  accessToken,user:validUser
+}
+  // //send mail
+  // const otp = generateOTP();
+  // const value = {
+  //   otp,
+  //   name: validUser.name,
+  //   email: validUser.email,
+  // };
+  // const verifyLogin = emailTemplate.verifyLogin(value);
 
-  //send mail
-  const otp = generateOTP();
-  const value = {
-    otp,
-    name: validUser.name,
-    email: validUser.email,
-  };
-  const verifyLogin = emailTemplate.verifyLogin(value);
+  // emailHelper.sendEmail(verifyLogin);
 
-  emailHelper.sendEmail(verifyLogin);
+  // //save to DB
+  // const authentication = {
+  //   oneTimeCode: otp,
+  //   expireAt: new Date(Date.now() + 3 * 60000),
+  // };
 
-  //save to DB
-  const authentication = {
-    oneTimeCode: otp,
-    expireAt: new Date(Date.now() + 3 * 60000),
-  };
+  // await User.findOneAndUpdate({ email }, { $set: { authentication } });
 
-  await User.findOneAndUpdate({ email }, { $set: { authentication } });
-
-  return {
-    user: validUser,
-  };
+  // return {
+  //   user: validUser,
+  // };
 };
 const changePasswordToDB = async (user: any, payload: any) => {
   const { currentPassword, newPassword, confirmPassword } = payload;

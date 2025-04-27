@@ -5,26 +5,22 @@ import AppError from "../../errors/AppError";
 import QueryBuilder from "../../builder/QueryBuilder";
 
 const createDocument = async (payload: TDocument) => {
-  const documents = await Document.find({
-    year: payload.year,
-    dholilNo: payload.dholilNo,
+  const documentCount = await Document.countDocuments({year: payload.year}); 
+  const documentNumber = documentCount + 1; 
+
+  const newDocument = await Document.create({
+    ...payload,
+    dholilNo: documentNumber,
   });
-
-  if (documents.length > 0) {
-    throw new AppError(400, "Documentalready exists");
-  }
-
-  const newDocument = await Document.create(payload);
   return newDocument;
 };
 
 const getAllDocuments = async (query: any) => {
-  const documentQuery = new QueryBuilder(Document.find(), query)
+  const documentQuery = new QueryBuilder(Document.find({isDeleted:false}), query)
     .filter()
     .sort()
     .fields()
-    .search(["title", "author", "year"]); // Adjust the fields as necessary
-  // .paginate();
+    .search(["title",  "year"]); 
 
   const documents = await documentQuery.modelQuery;
 
@@ -55,7 +51,11 @@ const updateDocument = async (id: string, payload: Partial<TDocument>) => {
 };
 
 const deleteDocument = async (id: string) => {
-  const document = await Document.findByIdAndDelete(id);
+  const document = await Document.findByIdAndUpdate(
+    id,
+    { isDeleted: true, updatedAt: new Date() },
+    { new: true },
+  );
   if (!document) {
     throw new AppError(404, "Document not found");
   }

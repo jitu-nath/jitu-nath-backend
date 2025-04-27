@@ -31,6 +31,11 @@ const documentSchema = new Schema<TDocument>(
       type: Date,
       default: Date.now,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    
   },
   {
     timestamps: true,
