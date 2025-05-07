@@ -4,6 +4,7 @@ const createDocumentValidation = z.object({
   body: z.object({
     balamNo: z.string().nonempty("Balam number is required"),
     pageNo: z.string().nonempty("Page number is required"),
+    dholilNo: z.string().nonempty("Dholil number is required"),
     year: z.number().int().nonnegative("Year must be a positive integer"),
     images: z.array(z.string()).optional(),
   }),

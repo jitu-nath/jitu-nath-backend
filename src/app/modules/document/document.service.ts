@@ -5,28 +5,62 @@ import AppError from "../../errors/AppError";
 import QueryBuilder from "../../builder/QueryBuilder";
 
 const createDocument = async (payload: TDocument) => {
-  const documentCount = await Document.countDocuments({year: payload.year}); 
-  const documentNumber = documentCount + 1; 
+   const existingDocument = await Document.findOne({
+    dholilNo: payload.dholilNo,
+    year: Number(payload.year),
+  }).lean();
+  if (existingDocument) {
+    if (!existingDocument.isDeleted) {
+      throw new AppError(
+        409,
+        "Document already exists with this dholilNo and year",
+      );
+    }
 
-  const newDocument = await Document.create({
-    ...payload,
-    dholilNo: documentNumber,
-  });
-  return newDocument;
+    // Update and return the existing document if it's marked as deleted
+    return await Document.findByIdAndUpdate(
+      existingDocument._id,
+      { ...payload, isDeleted: false, updatedAt: new Date() },
+      { new: true },
+    );
+  }
+  if (payload.dholilNo) {
+    const count = await Document.countDocuments({
+      year: payload.year,
+    });
+
+    if (count+1 < Number(payload.dholilNo)) {
+      throw new AppError(
+        409,
+        `Document dholilNo is not in sequence .It maybe ${count+1}`,
+      );
+    }
+  }
+
+  // Create new document if no existing document found
+  return await Document.create(payload);
 };
 
 const getAllDocuments = async (query: any) => {
-  const documentQuery = new QueryBuilder(Document.find({isDeleted:false}), query)
+  const documentQuery = new QueryBuilder(
+    Document.find({ isDeleted: false }),
+    query,
+  )
     .filter()
     .sort()
     .fields()
-    .search(["title",  "year"]); 
+    .search(["title", "year"]);
 
   const documents = await documentQuery.modelQuery;
 
   const meta = await documentQuery.countTotal();
 
   return { documents, meta };
+};
+const getDocumentCount = async (year: number) => {
+  console.log(year);
+  const count = await Document.countDocuments({ year: year });
+  return count;
 };
 
 const getDocumentById = async (id: string) => {
@@ -86,6 +120,7 @@ export const DocumentService = {
   findDocumentsByYear,
   findDocumentsByBalamNo,
   findDocumentsByDholilNo,
+  getDocumentCount,
 };
 
 export default DocumentService;
