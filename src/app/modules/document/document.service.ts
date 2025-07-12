@@ -5,10 +5,17 @@ import AppError from "../../errors/AppError";
 import QueryBuilder from "../../builder/QueryBuilder";
 
 const createDocument = async (payload: TDocument) => {
-   const existingDocument = await Document.findOne({
-    dholilNo: payload.dholilNo,
-    year: Number(payload.year),
-  }).lean();
+  // Use Promise.all to run queries in parallel for better performance
+  const [existingDocument, count] = await Promise.all([
+    Document.findOne({
+      dholilNo: payload.dholilNo,
+      year: Number(payload.year),
+    }).lean(),
+    Document.countDocuments({
+      year: payload.year,
+    })
+  ]);
+
   if (existingDocument) {
     if (!existingDocument.isDeleted) {
       throw new AppError(
@@ -24,11 +31,8 @@ const createDocument = async (payload: TDocument) => {
       { new: true },
     );
   }
+  
   if (payload.dholilNo) {
-    const count = await Document.countDocuments({
-      year: payload.year,
-    });
-
     if (count+1 < Number(payload.dholilNo)) {
       throw new AppError(
         409,
@@ -58,7 +62,6 @@ const getAllDocuments = async (query: any) => {
   return { documents, meta };
 };
 const getDocumentCount = async (year: number) => {
-  console.log(year);
   const count = await Document.countDocuments({ year: year });
   return count;
 };

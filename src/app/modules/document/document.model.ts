@@ -42,4 +42,10 @@ const documentSchema = new Schema<TDocument>(
   },
 );
 
+// Add indexes for better query performance
+documentSchema.index({ dholilNo: 1, year: 1 }); // For duplicate checking
+documentSchema.index({ year: 1, isDeleted: 1 }); // For counting and filtering
+documentSchema.index({ balamNo: 1 }); // For balamNo queries
+documentSchema.index({ isDeleted: 1 }); // For general filtering
+
 export const Document = model<TDocument>("Document", documentSchema);
