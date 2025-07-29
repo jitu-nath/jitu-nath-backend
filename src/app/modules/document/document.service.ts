@@ -13,7 +13,7 @@ const createDocument = async (payload: TDocument) => {
     }).lean(),
     Document.countDocuments({
       year: payload.year,
-    })
+    }),
   ]);
 
   if (existingDocument) {
@@ -31,12 +31,12 @@ const createDocument = async (payload: TDocument) => {
       { new: true },
     );
   }
-  
+
   if (payload.dholilNo) {
-    if (count+1 < Number(payload.dholilNo)) {
+    if (count + 1 < Number(payload.dholilNo)) {
       throw new AppError(
         409,
-        `Document dholilNo is not in sequence .It maybe ${count+1}`,
+        `Document dholilNo is not in sequence .It maybe ${count + 1}`,
       );
     }
   }
@@ -46,6 +46,7 @@ const createDocument = async (payload: TDocument) => {
 };
 
 const getAllDocuments = async (query: any) => {
+  // console.log(query);
   const documentQuery = new QueryBuilder(
     Document.find({ isDeleted: false }),
     query,
@@ -53,7 +54,8 @@ const getAllDocuments = async (query: any) => {
     .filter()
     .sort()
     .fields()
-    .search(["title", "year"]);
+    .search(["title", "year"])
+    .paginate();
 
   const documents = await documentQuery.modelQuery;
 
@@ -61,6 +63,12 @@ const getAllDocuments = async (query: any) => {
 
   return { documents, meta };
 };
+const getAllUniqueYears = async () => {
+  const years = await Document.distinct("year", { isDeleted: false })
+  // console.log(years);
+  return years;
+};
+
 const getDocumentCount = async (year: number) => {
   const count = await Document.countDocuments({ year: year });
   return count;
@@ -124,6 +132,7 @@ export const DocumentService = {
   findDocumentsByBalamNo,
   findDocumentsByDholilNo,
   getDocumentCount,
+  getAllUniqueYears
 };
 
 export default DocumentService;

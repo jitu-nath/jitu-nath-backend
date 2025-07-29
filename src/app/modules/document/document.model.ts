@@ -22,7 +22,7 @@ const documentSchema = new Schema<TDocument>(
     images: {
       type: [String],
       default: [],
-      },
+    },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -35,7 +35,6 @@ const documentSchema = new Schema<TDocument>(
       type: Boolean,
       default: false,
     },
-    
   },
   {
     timestamps: true,
@@ -46,6 +45,7 @@ const documentSchema = new Schema<TDocument>(
 documentSchema.index({ dholilNo: 1, year: 1 }); // For duplicate checking
 documentSchema.index({ year: 1, isDeleted: 1 }); // For counting and filtering
 documentSchema.index({ balamNo: 1 }); // For balamNo queries
+documentSchema.index({ year: 1 }); // For year queries
 documentSchema.index({ isDeleted: 1 }); // For general filtering
 
 export const Document = model<TDocument>("Document", documentSchema);

@@ -58,7 +58,7 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
 
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
     const { token } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const payload = req.body;
     await UserServices.resetPasswordToDB(token, payload);
     sendResponse(res, {

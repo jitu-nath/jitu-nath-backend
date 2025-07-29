@@ -6,7 +6,7 @@ import { DocumentService } from "./document.service";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const createDocument = catchAsync(async (req: Request, res: Response) => {
-  console.log(req.body);
+  // console.log(req.body);
   const result = await DocumentService.createDocument(req.body);
 
   sendResponse(res, {
@@ -23,8 +23,17 @@ const getAllDocuments = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: 200,
     message: "Documents retrieved successfully",
-    data: documents,
     meta: meta,
+    data: documents,
+    success: true,
+  });
+});
+const getAllUniqueYears = catchAsync(async (req: Request, res: Response) => {
+  const years = await DocumentService.getAllUniqueYears();
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Unique years retrieved successfully",
+    data: years,
     success: true,
   });
 });
@@ -79,7 +88,7 @@ const findDocumentsByYear = catchAsync(async (req: Request, res: Response) => {
 });
 const getDocumentCount= catchAsync(
   async (req: Request, res: Response) => {
-    console.log(req.params.year);
+    // console.log(req.params.year);
     const count = await DocumentService.getDocumentCount(
       Number(req.params.year),
     );
@@ -131,5 +140,6 @@ export const DocumentController = {
   findDocumentsByYear,
   findDocumentsByBalamNo,
   findDocumentsByDholilNo,
-  getDocumentCount
+  getDocumentCount,
+  getAllUniqueYears
 };

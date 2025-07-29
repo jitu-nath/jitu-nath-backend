@@ -134,12 +134,12 @@ const sendCodeToEmailForForgetPassword = async (email: string) => {
 //forget password
 const resetPasswordToDB = async (token: any, payload: any) => {
   const { newPassword, confirmPassword } = payload;
-  console.log(token, "token");
+  // console.log(token, "token");
   //isExist token
   const isExistToken = await User.findOne({
     resetToken: token,
   });
-  console.log(isExistToken, "isExistToken");
+  // console.log(isExistToken, "isExistToken");
   if (!isExistToken) {
     throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
   }

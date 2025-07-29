@@ -12,6 +12,7 @@ route.post(
 );
 route.get("/", DocumentController.getAllDocuments);
 route.get("/count/:year", DocumentController.getDocumentCount);
+route.get("/unique-years", DocumentController.getAllUniqueYears);
 route.get("/:id", DocumentController.getDocumentById);
 route.patch(
   "/:id",
