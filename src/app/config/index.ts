@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.join((process.cwd(), '.env')) });
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 export default {
   NODE_ENV: process.env.NODE_ENV,
@@ -14,6 +14,8 @@ export default {
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUND,
   stripe_secret_key: process.env.STRIPE_SECRET_KEY,
   stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
+
+  cors_origins: process.env.CORS_ORIGINS,
 
   email: {
     from: process.env.EMAIL_FROM,

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -m 20 \"https://www.jitunath.casacam.net/api/v1/document/unique-years\")",
+      "Bash(curl -s -m 20 \"https://www.jitunath.casacam.net/\")",
+      "Bash(curl -s -m 20 -X POST \"https://www.jitunath.casacam.net/api/upload\")",
+      "Bash(curl -sS -i -m 30 -X POST https://jitu-nath-backend.vercel.app/api/v1/user/login -H 'Content-Type: application/json' -d '{\"email\":\"jitunath8578@gmail.com\",\"password\":\"12345678\"}')",
+      "Bash(curl -sS -o /dev/null -w 'HTTP %{http_code}\\\\n' -m 20 --resolve jitu-nath-backend.vercel.app:443:64.29.17.195 -X POST https://jitu-nath-backend.vercel.app/api/v1/user/login -H 'Content-Type: application/json' -d '{\"email\":\"x\",\"password\":\"y\"}')",
+      "Bash(curl -sS -o /dev/null -w 'HTTP %{http_code}\\\\n' -m 20 -k -X POST https://64.29.17.195/api/v1/user/login -H 'Host: jitu-nath-backend.vercel.app' -H 'Content-Type: application/json' -d '{\"email\":\"x\",\"password\":\"y\"}')",
+      "Bash(curl -sS -D - -o /dev/null -m 20 -X POST https://jitu-nath-backend.vercel.app/api/v1//user/login -H 'Content-Type: application/json' -d '{\"email\":\"x\",\"password\":\"y\"}')",
+      "Bash(curl -sS -o /dev/null -w 'final HTTP %{http_code}, url=%{url_effective}\\\\n' -m 20 -L -X POST https://jitu-nath-backend.vercel.app/api/v1//user/login -H 'Content-Type: application/json' -d '{\"email\":\"jitunath8578@gmail.com\",\"password\":\"12345678\"}')",
+      "Bash(curl -sS -D - -m 20 -X POST https://jitu-nath-backend.vercel.app/api/v1/user/login -H 'Content-Type: application/json; charset=utf-8' -H 'Accept-Encoding: gzip' -d '{\"email\":\"x\",\"password\":\"y\"}')",
+      "Bash(curl -sS -m 20 -X POST https://jitu-nath-backend.vercel.app/api/v1//user/login -H 'Content-Type: application/json' -d '{\"email\":\"x\",\"password\":\"y\"}')"
+    ]
+  }
+}

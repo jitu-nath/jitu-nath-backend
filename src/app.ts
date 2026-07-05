@@ -5,11 +5,27 @@ import globalErrorHandler from "./app/middlewares/globalErrorhandler";
 import notFound from "./app/middlewares/notFound";
 import router from "./app/routes";
 import cookieParser from "cookie-parser";
+import config from "./app/config";
 
 
 const app: Application = express();
 
+// Allowed CORS origins: built-in defaults + any extra ones from the
+// CORS_ORIGINS env var (comma-separated) so production frontends can be
+// added without a code change / redeploy.
+const defaultOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5000",
+  "http://localhost:3001",
+  "https://jitu-nath-client.vercel.app",
+];
 
+const envOrigins = (config.cors_origins || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+const allowedOrigins = [...new Set([...defaultOrigins, ...envOrigins])];
 
 
 
@@ -18,12 +34,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:5000",
-      "http://localhost:3001",
-      "https://jitu-nath-client.vercel.app"
-    ],
+    origin: allowedOrigins,
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type","x-refresh-token",], // allow Authorization header
     exposedHeaders: ["Authorization", "set-cookie"],
