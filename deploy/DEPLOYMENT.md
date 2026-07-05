@@ -1,14 +1,14 @@
 # Deploying jitu-nath backend to an Ubuntu VPS
 
-API domain: **https://nuapi.zamansheikh.com**
+API domain: **https://pickluapi.zamansheikh.com**
 
 ## 0. DNS
-Point an **A record** for `nuapi` → your VPS public IP, at the `zamansheikh.com` DNS host.
+Point an **A record** for `pickluapi` → your VPS public IP, at the `zamansheikh.com` DNS host.
 ```
-Type  Host   Value
-A     nuapi  <YOUR_VPS_IP>
+Type  Host       Value
+A     pickluapi  <YOUR_VPS_IP>
 ```
-Wait until `ping nuapi.zamansheikh.com` resolves to your IP before running certbot.
+Wait until `ping pickluapi.zamansheikh.com` resolves to your IP before running certbot.
 
 ## 1. Server prerequisites (run as root / sudo)
 ```bash
@@ -63,8 +63,8 @@ Local smoke test: `curl http://127.0.0.1:5001/` → `{"message":"Welcome to jitu
 
 ## 5. Nginx reverse proxy
 ```bash
-sudo cp deploy/nginx-nuapi.conf /etc/nginx/sites-available/nuapi.zamansheikh.com
-sudo ln -s /etc/nginx/sites-available/nuapi.zamansheikh.com /etc/nginx/sites-enabled/
+sudo cp deploy/nginx-pickluapi.conf /etc/nginx/sites-available/pickluapi.zamansheikh.com
+sudo ln -s /etc/nginx/sites-available/pickluapi.zamansheikh.com /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -72,10 +72,10 @@ sudo systemctl reload nginx
 ## 6. HTTPS (Let's Encrypt)
 ```bash
 sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d nuapi.zamansheikh.com
+sudo certbot --nginx -d pickluapi.zamansheikh.com
 ```
 Certbot edits the Nginx config to serve HTTPS and auto-renews.
-Test: open `https://nuapi.zamansheikh.com/` in a browser.
+Test: open `https://pickluapi.zamansheikh.com/` in a browser.
 
 ## 7. Redeploy after code changes
 ```bash
