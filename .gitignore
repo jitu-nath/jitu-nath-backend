@@ -3,3 +3,8 @@ dist
 .env
 .vercel
 logs
+# Added by git-vanish — removed from history
+C.txt
+
+# Added by git-vanish — removed from history
+ecosystem.config.js
